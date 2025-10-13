@@ -2,10 +2,17 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Courses;
+use App\Filament\Resources\Categories\CategoryResource;
+use App\Filament\Resources\Courses\CourseResource;
+use App\Models\Category;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -36,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
-            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->viteTheme(['resources/css/filament/admin/theme.css', "resources/js/app.js"])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
@@ -55,6 +62,32 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
+                $groups = Category::get()
+                    ->map(function ($category) {
+                        return NavigationGroup::make($category->name)
+                            ->items(
+                                $category->subCategories->map(
+                                    fn($subCategory) => NavigationItem::make($subCategory->name)
+                                )->all()
+                            )->collapsed();
+                    })
+                    ->push(
+                        NavigationGroup::make('Administration')->items([
+                            ...CategoryResource::getNavigationItems(),
+                            ...CourseResource::getNavigationItems(),
+                        ])->icon('heroicon-o-cog')->collapsed()
+                    );
+
+                return $builder
+                    ->groups($groups->all())
+                    ->items([
+                        NavigationItem::make('Dashboard')
+                            ->icon('heroicon-o-home')
+                            ->isActiveWhen(fn(): bool => request()->routeIs('filament.admin.pages.dashboard'))
+                            ->url(fn(): string => Dashboard::getUrl()),
+                    ]);
+            })->spa();
     }
 }
