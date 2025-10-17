@@ -5,12 +5,15 @@ namespace App\Filament\Resources\Courses;
 use App\Filament\Resources\Courses\Pages\CreateCourse;
 use App\Filament\Resources\Courses\Pages\EditCourse;
 use App\Filament\Resources\Courses\Pages\ListCourses;
+use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
 use App\Filament\Resources\Courses\Pages\ViewCourse;
 use App\Filament\Resources\Courses\Schemas\CourseForm;
 use App\Filament\Resources\Courses\Schemas\CourseInfolist;
 use App\Filament\Resources\Courses\Tables\CoursesTable;
 use App\Models\Course;
 use BackedEnum;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -32,7 +35,10 @@ class CourseResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return CoursesTable::configure($table);
+        return CoursesTable::configure($table)->recordActions([
+            ViewAction::make(),
+            EditAction::make()
+        ]);
     }
 
     public static function getRelations(): array
@@ -46,6 +52,7 @@ class CourseResource extends Resource
     {
         return [
             'index' => ListCourses::route('/'),
+            'list' => ListCoursesBySubcategory::route('/list/{subcategory}'),
             'create' => CreateCourse::route('/create'),
             'view' => ViewCourse::route('/{record}'),
             'edit' => EditCourse::route('/{record}/edit'),

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Courses\Schemas;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -30,7 +31,22 @@ class CourseForm
                 Textarea::make('description')
                     ->columnSpanFull(),
                 FileUpload::make('image')
+                    ->image()
+                    ->directory('files')
                     ->columnSpanFull(),
+                Repeater::make("lessions")
+                    ->relationship()
+                    ->defaultItems(1)
+                    ->schema([
+                        TextInput::make("name")->required(),
+                        Textarea::make("description"),
+                        FileUpload::make("image")->image()->required()->directory('files')
+                            ->columnSpanFull(),
+                        FileUpload::make("video")->required()->directory('files')->acceptedFileTypes(['video/*'])
+                            ->maxSize(102400)
+                            ->columnSpanFull()
+
+                    ])
             ])->columns(1);
     }
 }

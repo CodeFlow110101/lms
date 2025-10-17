@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Courses;
 use App\Filament\Resources\Categories\CategoryResource;
 use App\Filament\Resources\Courses\CourseResource;
+use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
 use App\Models\Category;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -69,7 +70,7 @@ class AdminPanelProvider extends PanelProvider
                         return NavigationGroup::make($category->name)
                             ->items(
                                 $category->subCategories->map(
-                                    fn($subCategory) => NavigationItem::make($subCategory->name)
+                                    fn($subCategory) => NavigationItem::make($subCategory->name)->url(CourseResource::getUrl("list", ["subcategory" => $subCategory->id]))->isActiveWhen(fn(): bool => request()->url() == CourseResource::getUrl("list", ["subcategory" => $subCategory->id]))
                                 )->all()
                             )->collapsed();
                     })
