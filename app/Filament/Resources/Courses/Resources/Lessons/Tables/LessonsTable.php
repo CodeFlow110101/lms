@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Tables;
+namespace App\Filament\Resources\Courses\Resources\Lessons\Tables;
 
-use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Resources\Lessons\LessonResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -17,7 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
-class CoursesTable
+class LessonsTable
 {
     public static function configure(Table $table): Table
     {
@@ -28,12 +27,13 @@ class CoursesTable
                     Stack::make([
                         TextColumn::make('name')->description(fn($record) => Str::limit($record->description, 500))->extraAttributes(["class" => "gap-4 py-4"])->size(TextSize::Large)->weight(FontWeight::Bold)->searchable(),
                     ])->grow(true)
-                ])->extraAttributes(["class" => "flex items-start"])->from('md')
+                ])->extraAttributes(["class" => "flex items-center"])->from('md')
             ])
-            ->recordUrl(fn($record): string => CourseResource::getUrl('view', ['record' => $record->id]))
+            ->recordUrl(fn($record): string => LessonResource::getUrl('view', ['course' => $record->course->id, 'record' => $record->id,]))
             ->filters([
                 //
             ])
+            ->recordActions([])
             ->toolbarActions([
                 BulkActionGroup::make([
                     // DeleteBulkAction::make(),

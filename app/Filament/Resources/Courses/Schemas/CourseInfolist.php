@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources\Courses\Schemas;
 
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
+use Illuminate\Support\HtmlString;
 
 class CourseInfolist
 {
@@ -11,13 +14,8 @@ class CourseInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('subCategory.name')
-                    ->numeric(),
-                TextEntry::make('name'),
-                TextEntry::make('created_at')
-                    ->dateTime(),
-                TextEntry::make('updated_at')
-                    ->dateTime(),
+                ImageEntry::make('image')->label(fn() => new HtmlString("<div></div>"))->imageSize("50%")->columnSpanFull()->extraAttributes(['class' => "flex justify-center items-center"])->extraImgAttributes(['class' => 'rounded-2xl',]),
+                TextEntry::make('description')->columnSpanFull(),
             ]);
     }
 }

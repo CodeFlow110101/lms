@@ -34,7 +34,7 @@ class CourseForm
                     ->image()
                     ->directory('files')
                     ->columnSpanFull(),
-                Repeater::make("lessions")
+                Repeater::make("lessons")
                     ->relationship()
                     ->defaultItems(1)
                     ->schema([
