@@ -43,7 +43,7 @@ class CourseForm
                         FileUpload::make("image")->image()->required()->directory('files')
                             ->columnSpanFull(),
                         FileUpload::make("video")->required()->directory('files')->acceptedFileTypes(['video/*'])
-                            ->maxSize(102400)
+                            ->maxSize(133120)
                             ->columnSpanFull()
 
                     ])
