@@ -6,6 +6,7 @@ use App\Filament\Pages\Courses;
 use App\Filament\Resources\Categories\CategoryResource;
 use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
+use App\Filament\Resources\Posts\PostResource;
 use App\Models\Category;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -91,10 +92,21 @@ class AdminPanelProvider extends PanelProvider
                     ->groups($groups->all())
                     ->items([
                         NavigationItem::make('Dashboard')
-                            ->icon('heroicon-o-home')
+                            ->icon('heroicon-o-squares-2x2')
                             ->isActiveWhen(fn(): bool => request()->routeIs('filament.admin.pages.dashboard'))
                             ->url(fn(): string => Dashboard::getUrl()),
+                        NavigationItem::make('Community')
+                            ->icon('heroicon-o-chat-bubble-left-right')
+                            ->isActiveWhen(fn(): bool => $this->getResourcePageUrlPatters([PostResource::class])->contains(fn($pattern) => request()->routeIs($pattern)))
+                            ->url(fn(): string => PostResource::getUrl("index")),
                     ]);
-            })->spa();
+            })
+            ->sidebarFullyCollapsibleOnDesktop()
+            ->spa();
+    }
+
+    public function getResourcePageUrlPatters($resources)
+    {
+        return collect($resources)->map(fn($resource) => collect($resource::getPages())->map(fn($page) => $page->getPage()::getNavigationItemActiveRoutePattern()))->flatten();
     }
 }

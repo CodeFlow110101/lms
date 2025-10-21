@@ -10,6 +10,7 @@ export default defineConfig({
         "resources/views/**/*.blade.php",
         "app/Http/Controllers/**/*.php",
         "app/Livewire/**/*.php",
+        "app/Livewire/*.php",
         "app/Filament/**/*.php",
         "app/Providers/Filament/AdminPanelProvider.php",
         "routes/**/*.php",

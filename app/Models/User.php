@@ -6,8 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Kirschbaum\Commentions\Contracts\Commenter;
+use Kirschbaum\Commentions\HasComments;
+use Kirschbaum\Commentions\Contracts\Commentable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Commenter
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
