@@ -12,3 +12,7 @@
 .fi-sidebar-nav-groups {
   @apply gap-1;
 }
+
+.navigation-widget {
+  @apply cursor-pointer bg-transparent hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors duration-75;
+}

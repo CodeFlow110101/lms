@@ -3,7 +3,7 @@
     :entry="$entry">
     <div {{ $getExtraAttributeBag() }}>
         <div
-            x-data="videoPlayer('{{ route('video.stream', ['filename' => Str::after($getState(), 'files/')]) }}', '{{ route('image.show', ['filename' => Str::after($record->image, 'files/')]) }}')"
+            x-data="videoPlayer('{{ route('video.stream', ['filename' => Str::after($getState(), 'files/')]) }}', '{{ route('image.show', ['filename' => Str::after($record->image, 'files/')]) }}', '{{ $getExtraAttributeBag()->get('trackCompletion') }}')"
             class=" w-full mx-auto bg-black rounded-lg overflow-hidden shadow-lg select-none"
             @keydown.window.space.prevent="togglePlay">
             <div class="relative">
@@ -62,83 +62,5 @@
                 </div>
             </div>
         </div>
-        <!-- <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('videoPlayer', () => ({
-                    isPlaying: false,
-                    isMuted: false,
-                    showThumbnail: true,
-                    duration: 0,
-                    currentTime: 0,
-                    progress: 0,
-
-                    thumbnail: 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217',
-                    videoSrc: "{{ route('video.stream', ['filename' => Str::chopStart($getState(),'files/')]) }}",
-
-                    init() {
-                        this.$refs.video.src = this.videoSrc;
-                    },
-
-                    playVideo() {
-                        this.showThumbnail = false;
-                        this.togglePlay();
-                    },
-
-                    togglePlay() {
-                        const v = this.$refs.video;
-                        if (v.paused) {
-                            v.play();
-                            this.isPlaying = true;
-                            this.showThumbnail = false;
-                        } else {
-                            v.pause();
-                            this.isPlaying = false;
-                        }
-                    },
-
-                    toggleMute() {
-                        const v = this.$refs.video;
-                        v.muted = !v.muted;
-                        this.isMuted = v.muted;
-                    },
-
-                    updateProgress() {
-                        const v = this.$refs.video;
-                        this.currentTime = v.currentTime;
-                        this.progress = (v.currentTime / v.duration) * 100;
-                    },
-
-                    setDuration() {
-                        this.duration = this.$refs.video.duration;
-                    },
-
-                    seek(event) {
-                        const v = this.$refs.video;
-                        const rect = event.target.getBoundingClientRect();
-                        const pos = (event.clientX - rect.left) / rect.width;
-                        v.currentTime = pos * v.duration;
-                    },
-
-                    // Format time as MM:SS
-                    formatTime(seconds) {
-                        if (!seconds || isNaN(seconds)) return "00:00";
-                        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
-                        const s = Math.floor(seconds % 60).toString().padStart(2, "0");
-                        return `${m}:${s}`;
-                    },
-
-                    get currentTimeDisplay() {
-                        return this.formatTime(this.currentTime);
-                    },
-
-                    get durationDisplay() {
-                        return this.formatTime(this.duration);
-                    },
-                }));
-            });
-        </script> -->
-
-
-
     </div>
 </x-dynamic-component>

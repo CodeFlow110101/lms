@@ -28,9 +28,10 @@ class PostForm
                 Repeater::make('media')
                     ->label("Images (Max 4)")
                     ->relationship()
+                    ->defaultItems(0)
                     ->maxItems(4)
                     ->schema([
-                        FileUpload::make('file')->label(fn() => new HtmlString("<div></div>"))
+                        FileUpload::make('file')->label(fn() => new HtmlString("<div></div>"))->required()
                     ]),
             ])->columns(1);
     }

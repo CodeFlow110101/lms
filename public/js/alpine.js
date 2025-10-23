@@ -1,4 +1,4 @@
-function videoPlayer(video, thumbnail) {
+function videoPlayer(video, thumbnail, trackCompletion) {
   return {
     isPlaying: false,
     isMuted: false,
@@ -6,12 +6,21 @@ function videoPlayer(video, thumbnail) {
     duration: 0,
     currentTime: 0,
     progress: 0,
-
+    trackCompletion: trackCompletion,
     thumbnail: thumbnail,
     videoSrc: video,
 
     init() {
       this.$refs.video.src = this.videoSrc;
+      if (this.trackCompletion == "true") {
+        const v = this.$refs.video;
+        v.src = this.videoSrc;
+        v.addEventListener("ended", () => {
+          this.$wire.markCompleted();
+          this.isPlaying = false;
+          this.showThumbnail = true;
+        });
+      }
     },
 
     playVideo() {

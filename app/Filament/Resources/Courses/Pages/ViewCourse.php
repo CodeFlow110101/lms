@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Livewire;
 use Illuminate\Contracts\Support\Htmlable;
+use Livewire\Attributes\On;
 
 class ViewCourse extends ViewRecord
 {
@@ -16,6 +17,12 @@ class ViewCourse extends ViewRecord
     public function getHeading(): string | Htmlable
     {
         return $this->record->name;
+    }
+
+    #[On('reset-view-course-page')]
+    public function resetPage()
+    {
+        // ...
     }
 
     protected function getHeaderActions(): array

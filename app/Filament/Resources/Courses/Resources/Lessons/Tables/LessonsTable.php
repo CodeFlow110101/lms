@@ -14,6 +14,7 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class LessonsTable
@@ -26,6 +27,7 @@ class LessonsTable
                     ImageColumn::make('image')->imageSize("100%")->imageWidth("300px")->grow(false)->extraAttributes(["class" => "flex justify-center items-center *:rounded-xl"]),
                     Stack::make([
                         TextColumn::make('name')->description(fn($record) => Str::limit($record->description, 500))->extraAttributes(["class" => "gap-4 py-4"])->size(TextSize::Large)->weight(FontWeight::Bold)->searchable(),
+                        TextColumn::make('progress.is_completed')->badge()->color(fn($record) => $record->progress()->where("user_id", Auth::id())->exists() ? "success" : "danger")->formatStateUsing(fn($record, $state) => $record->progress()->where("user_id", Auth::id())->exists() ? "Completed" : "Not Completed")
                     ])->grow(true)
                 ])->extraAttributes(["class" => "flex items-center"])->from('md')
             ])

@@ -14,6 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ListLessonWidget extends TableWidget
@@ -37,7 +38,8 @@ class ListLessonWidget extends TableWidget
                     Stack::make([
                         TextColumn::make('name'),
                     ])->grow(false),
-                    TextColumn::make('name')->badge()->formatStateUsing(fn($record) => $record->id == $this->lesson->id ? "Playing" : "Play")->grow(false)
+                    TextColumn::make('name')->badge()->formatStateUsing(fn($record) => $record->id == $this->lesson->id ? "Playing" : "Play")->grow(false),
+                    TextColumn::make('progress.is_completed')->badge()->color(fn($record) => $record->progress()->where("user_id", Auth::id())->exists() ? "success" : "danger")->formatStateUsing(fn($record, $state) => $record->progress()->where("user_id", Auth::id())->exists() ? "Completed" : "Not Completed")
                 ])->extraAttributes(["class" => "flex items-center"])->from('md')
             ])->recordUrl(fn($record): string => LessonResource::getUrl('view', ['course' => $record->course->id, 'record' => $record->id,]));
         return $table;

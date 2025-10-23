@@ -7,6 +7,7 @@ use App\Filament\Resources\Courses\Resources\Lessons\Widgets\ListLessonWidget;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Auth;
 
 class ViewLesson extends ViewRecord
 {
@@ -29,5 +30,17 @@ class ViewLesson extends ViewRecord
         return [
             EditAction::make(),
         ];
+    }
+
+    public function markCompleted()
+    {
+        $this->record->progress()->updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+            ],
+            [
+                'is_completed' => true,
+            ]
+        );
     }
 }
