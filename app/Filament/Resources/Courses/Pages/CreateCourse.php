@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateCourse extends CreateRecord
 {
     protected static string $resource = CourseResource::class;
+
+    public function getHeading(): string
+    {
+        return "";
+    }
 }

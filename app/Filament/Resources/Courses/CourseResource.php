@@ -24,6 +24,10 @@ class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
 
+    protected static ?string $modelLabel = 'Classroom';
+
+    protected static ?string $pluralModelLabel = 'Classroom';
+
     public static function form(Schema $schema): Schema
     {
         return CourseForm::configure($schema);
@@ -53,7 +57,6 @@ class CourseResource extends Resource
     {
         return [
             'index' => ListCourses::route('/'),
-            'list' => ListCoursesBySubcategory::route('/list/{subcategory}'),
             'create' => CreateCourse::route('/create'),
             'view' => ViewCourse::route('/{record}'),
             'edit' => EditCourse::route('/{record}/edit'),

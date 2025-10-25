@@ -8,6 +8,11 @@ use Filament\Pages\Dashboard as BaseDashboard;
 
 class Dashboard extends BaseDashboard
 {
+    public static function getNavigationIcon(): ?string
+    {
+        return null;
+    }
+
     public function getWidgets(): array
     {
         return collect(Filament::getWidgets())->push(Learings::class)->all();

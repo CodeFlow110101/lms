@@ -1,3 +1,3 @@
 <div>
-    {{ $this->productInfolist }}
+    {{ $this->comments }}
 </div>

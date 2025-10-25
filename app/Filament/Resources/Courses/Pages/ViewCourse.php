@@ -16,7 +16,7 @@ class ViewCourse extends ViewRecord
 
     public function getHeading(): string | Htmlable
     {
-        return $this->record->name;
+        return "";
     }
 
     #[On('reset-view-course-page')]

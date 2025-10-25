@@ -15,14 +15,7 @@ class ViewLesson extends ViewRecord
 
     public function getHeading(): string | Htmlable
     {
-        return $this->record->name;
-    }
-
-    protected function getFooterWidgets(): array
-    {
-        return [
-            ListLessonWidget::make(['lesson' => $this->record->id])
-        ];
+        return $this->record->course->name;
     }
 
     protected function getHeaderActions(): array
@@ -30,17 +23,5 @@ class ViewLesson extends ViewRecord
         return [
             EditAction::make(),
         ];
-    }
-
-    public function markCompleted()
-    {
-        $this->record->progress()->updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-            ],
-            [
-                'is_completed' => true,
-            ]
-        );
     }
 }

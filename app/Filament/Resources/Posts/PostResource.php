@@ -10,7 +10,6 @@ use App\Filament\Resources\Posts\Schemas\PostForm;
 use App\Filament\Resources\Posts\Schemas\PostInfolist;
 use App\Filament\Resources\Posts\Tables\PostsTable;
 use App\Models\Post;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -20,7 +19,14 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    public static function getNavigationIcon(): ?string
+    {
+        return null;
+    }
+
+    protected static ?string $modelLabel = 'Community';
+
+    protected static ?string $pluralModelLabel = 'Community';
 
     public static function form(Schema $schema): Schema
     {
@@ -48,8 +54,8 @@ class PostResource extends Resource
     {
         return [
             'index' => ListPosts::route('/'),
-            'create' => CreatePost::route('/create'),
-            // 'view' => ViewPost::route('/{record}'),
+            // 'create' => CreatePost::route('/create'),
+            'view' => ViewPost::route('/{record}'),
             // 'edit' => EditPost::route('/{record}/edit'),
         ];
     }

@@ -1,30 +1,17 @@
-function videoPlayer(video, thumbnail, trackCompletion) {
+function videoPlayer(video) {
   return {
     isPlaying: false,
     isMuted: false,
-    showThumbnail: true,
     duration: 0,
     currentTime: 0,
     progress: 0,
-    trackCompletion: trackCompletion,
-    thumbnail: thumbnail,
     videoSrc: video,
 
     init() {
       this.$refs.video.src = this.videoSrc;
-      if (this.trackCompletion == "true") {
-        const v = this.$refs.video;
-        v.src = this.videoSrc;
-        v.addEventListener("ended", () => {
-          this.$wire.markCompleted();
-          this.isPlaying = false;
-          this.showThumbnail = true;
-        });
-      }
     },
 
     playVideo() {
-      this.showThumbnail = false;
       this.togglePlay();
     },
 
@@ -33,7 +20,6 @@ function videoPlayer(video, thumbnail, trackCompletion) {
       if (v.paused) {
         v.play();
         this.isPlaying = true;
-        this.showThumbnail = false;
       } else {
         v.pause();
         this.isPlaying = false;

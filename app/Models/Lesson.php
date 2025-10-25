@@ -27,4 +27,19 @@ class Lesson extends Model
     {
         return $this->hasMany(LessonProgress::class, "lesson_id", "id");
     }
+
+    public function getCourseLessonsAttribute()
+    {
+        return $this->course->lessons;
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(LessonImage::class, "lesson_id", "id");
+    }
+
+    public function videos(): HasMany
+    {
+        return $this->hasMany(LessonVideo::class, "lesson_id", "id");
+    }
 }

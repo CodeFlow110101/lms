@@ -11,12 +11,7 @@ class Course extends Model
 {
     protected $table = "courses";
 
-    protected $fillable = ["sub_category_id", "name", "description", "image"];
-
-    public function subCategory(): BelongsTo
-    {
-        return $this->belongsTo(SubCategory::class, "sub_category_id", "id");
-    }
+    protected $fillable = ["name", "description", "image"];
 
     public function lessons(): HasMany
     {

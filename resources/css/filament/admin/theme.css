@@ -9,10 +9,18 @@
   @apply hidden;
 }
 
-.fi-sidebar-nav-groups {
-  @apply gap-1;
+.fi-modal-window-has-sticky-header.fi-modal-window-has-footer {
+  @apply overflow-y-auto;
 }
 
-.navigation-widget {
-  @apply cursor-pointer bg-transparent hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors duration-75;
+.comments-wrapper .comm\:flex-1.comm\:space-y-2 {
+  @apply flex flex-col-reverse *:last:flex *:last:flex-col-reverse gap-4;
+}
+
+[id^="filament-comment-"] {
+  @apply !m-0;
+}
+
+.fi-sidebar-nav-groups {
+  @apply gap-1;
 }

@@ -11,6 +11,11 @@ class EditCourse extends EditRecord
 {
     protected static string $resource = CourseResource::class;
 
+    public function getHeading(): string
+    {
+        return "";
+    }
+
     protected function getHeaderActions(): array
     {
         return [

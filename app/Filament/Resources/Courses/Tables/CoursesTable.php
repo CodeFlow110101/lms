@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Courses\Tables;
 
 use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Resources\Lessons\LessonResource;
+use App\Filament\Tables\Columns\ProgressBarColumn;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -23,12 +24,11 @@ class CoursesTable
     {
         return $table
             ->columns([
-                Split::make([
-                    ImageColumn::make('image')->imageSize("100%")->imageWidth("300px")->grow(false)->extraAttributes(["class" => "flex justify-center items-center *:rounded-xl"]),
-                    Stack::make([
-                        TextColumn::make('name')->description(fn($record) => Str::limit($record->description, 500))->extraAttributes(["class" => "gap-4 py-4"])->size(TextSize::Large)->weight(FontWeight::Bold)->searchable(),
-                    ])->grow(true)
-                ])->extraAttributes(["class" => "flex items-start"])->from('md')
+                ImageColumn::make('image')->imageSize("100%")->imageWidth("100%")->grow(false)->extraAttributes(["class" => "flex justify-center items-center *:rounded-xl"]),
+                Stack::make([
+                    TextColumn::make('name')->description(fn($record) => Str::limit($record->description, 80))->extraAttributes(["class" => "gap-4 py-4"])->size(TextSize::Large)->weight(FontWeight::Bold)->searchable(),
+                    ProgressBarColumn::make('progress_percentage'),
+                ])->grow(true),
             ])
             ->recordUrl(fn($record): string => CourseResource::getUrl('view', ['record' => $record->id]))
             ->filters([
@@ -38,6 +38,9 @@ class CoursesTable
                 BulkActionGroup::make([
                     // DeleteBulkAction::make(),
                 ]),
+            ])->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ]);
     }
 }

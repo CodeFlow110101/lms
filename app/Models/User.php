@@ -3,13 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Kirschbaum\Commentions\Contracts\Commenter;
-use Kirschbaum\Commentions\HasComments;
-use Kirschbaum\Commentions\Contracts\Commentable;
 
 class User extends Authenticatable implements Commenter
 {
@@ -46,6 +46,11 @@ class User extends Authenticatable implements Commenter
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class, "user_id", "id");
+    }
+
+    public function getAvatarAttribute()
+    {
+        return Filament::getUserAvatarUrl($this);
     }
 
     protected function casts(): array

@@ -3,7 +3,7 @@
     :entry="$entry">
     <div {{ $getExtraAttributeBag() }}>
         <div
-            x-data="videoPlayer('{{ route('video.stream', ['filename' => Str::after($getState(), 'files/')]) }}', '{{ route('image.show', ['filename' => Str::after($record->image, 'files/')]) }}', '{{ $getExtraAttributeBag()->get('trackCompletion') }}')"
+            x-data="videoPlayer('{{ route('video.stream', ['filename' => Str::after($getState(), 'files/')]) }}')"
             class=" w-full mx-auto bg-black rounded-lg overflow-hidden shadow-lg select-none"
             @keydown.window.space.prevent="togglePlay">
             <div class="relative">
@@ -18,16 +18,8 @@
                     @timeupdate="updateProgress"
                     @loadedmetadata="setDuration"></video>
 
-                <!-- Thumbnail -->
-                <template x-if="!isPlaying && showThumbnail">
-                    <img
-                        :src="thumbnail"
-                        class="absolute inset-0 w-full h-full object-cover cursor-pointer"
-                        @click="playVideo" />
-                </template>
-
                 <!-- Overlay Play Button -->
-                <template x-if="!isPlaying && showThumbnail">
+                <template x-if="!isPlaying">
                     <div class="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/50 text-4xl">
                         <x-filament::icon-button @click="playVideo" icon="heroicon-m-play" label="New label" size="xl" />
                     </div>

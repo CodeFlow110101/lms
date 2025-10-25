@@ -6,12 +6,15 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
 
 class CourseForm
 {
@@ -19,13 +22,6 @@ class CourseForm
     {
         return $schema
             ->components([
-                Select::make('sub_category_id')
-                    ->label('Sub Category')
-                    ->options(fn($get) => SubCategory::with("category")->get()->mapWithKeys(fn($subcategory) => [$subcategory->id => $subcategory->name . " (" . $subcategory->category->name . ")"]))
-                    ->searchable()
-                    ->native(false)
-                    ->required()
-                    ->placeholder("Select a Category"),
                 TextInput::make('name')
                     ->required(),
                 Textarea::make('description')
@@ -34,19 +30,41 @@ class CourseForm
                     ->image()
                     ->directory('files')
                     ->columnSpanFull(),
-                Repeater::make("lessons")
-                    ->relationship()
-                    ->defaultItems(1)
+                Section::make("Lessons")
                     ->schema([
-                        TextInput::make("name")->required(),
-                        Textarea::make("description"),
-                        FileUpload::make("image")->image()->required()->directory('files')
-                            ->columnSpanFull(),
-                        FileUpload::make("video")->required()->directory('files')->acceptedFileTypes(['video/*'])
-                            ->maxSize(133120)
-                            ->columnSpanFull()
-
-                    ])
+                        Repeater::make("lessons")
+                            ->label(fn() => new HtmlString("<div></div>"))
+                            ->addActionLabel('Add Lesson')
+                            ->relationship()
+                            ->defaultItems(1)
+                            ->collapsed()
+                            ->schema([
+                                TextInput::make("name")->required(),
+                                RichEditor::make('description')->toolbarButtons([
+                                    ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                                    ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                                    ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                                    ['table'],
+                                    ['undo', 'redo'],
+                                ]),
+                                Repeater::make("images")
+                                    ->relationship()
+                                    ->schema([
+                                        FileUpload::make("file")->image()->required()->directory('files')->columnSpanFull(),
+                                    ])->grid(2),
+                                Repeater::make("videos")
+                                    ->relationship()
+                                    ->schema([
+                                        FileUpload::make("file")->acceptedFileTypes([
+                                            'video/mp4',
+                                            'video/mpeg',
+                                            'video/quicktime',
+                                            'video/x-msvideo', // avi
+                                            'video/x-matroska', // mkv
+                                        ])->required()->directory('files')->columnSpanFull(),
+                                    ])->grid(2),
+                            ])
+                    ]),
             ])->columns(1);
     }
 }

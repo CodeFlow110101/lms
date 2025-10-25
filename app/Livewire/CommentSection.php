@@ -19,7 +19,7 @@ class CommentSection extends Component implements HasSchemas
 
     public $post_id;
 
-    public function productInfolist(Schema $schema): Schema
+    public function comments(Schema $schema): Schema
     {
         return $schema
             ->record(Post::find($this->post_id))
