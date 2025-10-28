@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Courses;
 
+use App\Filament\Resources\Courses\Pages\AdminListCourses;
 use App\Filament\Resources\Courses\Pages\CreateCourse;
 use App\Filament\Resources\Courses\Pages\EditCourse;
 use App\Filament\Resources\Courses\Pages\ListCourses;
 use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
+use App\Filament\Resources\Courses\Pages\UserListCourses;
 use App\Filament\Resources\Courses\Pages\ViewCourse;
-use App\Filament\Resources\Courses\RelationManagers\LessonsRelationManager;
+use App\Filament\Resources\Courses\RelationManagers\SectionsRelationManager;
 use App\Filament\Resources\Courses\Schemas\CourseForm;
 use App\Filament\Resources\Courses\Schemas\CourseInfolist;
 use App\Filament\Resources\Courses\Tables\CoursesTable;
@@ -19,14 +21,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
 
-    protected static ?string $modelLabel = 'Classroom';
-
-    protected static ?string $pluralModelLabel = 'Classroom';
+    protected static string | UnitEnum | null $navigationGroup = 'Administration';
 
     public static function form(Schema $schema): Schema
     {
@@ -49,7 +50,7 @@ class CourseResource extends Resource
     public static function getRelations(): array
     {
         return [
-            LessonsRelationManager::class
+            SectionsRelationManager::class
         ];
     }
 

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Resources\Lessons\Schemas;
+namespace App\Filament\Resources\Lessons\Schemas;
 
 use App\Filament\Infolists\Components\NavigationButtonEntry;
 use App\Filament\Infolists\Components\ProgressBarEntry;
 use App\Filament\Infolists\Components\VideoPlayerEntry;
 use App\Filament\Resources\Courses\CourseResource;
+use App\Models\Lesson;
 use Filament\Forms\Components\Repeater;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;

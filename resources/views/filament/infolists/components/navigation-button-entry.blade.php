@@ -2,7 +2,7 @@
     :component="$getEntryWrapperView()"
     :entry="$entry">
     <div {{ $getExtraAttributeBag() }}>
-        @if($id == $this->record->id)
+        @if($id == request()->lesson)
         <x-filament::button href="{{ $url }}" tag="a" class="w-full py-3.5 flex justify-start" color="primary">
             {{ $record->name }}
         </x-filament::button>

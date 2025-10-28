@@ -13,11 +13,6 @@ class Dashboard extends BaseDashboard
         return null;
     }
 
-    public function getWidgets(): array
-    {
-        return collect(Filament::getWidgets())->push(Learings::class)->all();
-    }
-
     public function getColumns(): int | array
     {
         return 1;

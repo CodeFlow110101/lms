@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Resources\Lessons\Pages;
+namespace App\Filament\Resources\Lessons\Pages;
 
-use App\Filament\Resources\Courses\Resources\Lessons\LessonResource;
+use App\Filament\Resources\Lessons\LessonResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateLesson extends CreateRecord

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Resources\Lessons;
+namespace App\Filament\Resources\Lessons;
 
 use App\Filament\Resources\Courses\CourseResource;
-use App\Filament\Resources\Courses\RelationManagers\LessonsRelationManager;
-use App\Filament\Resources\Courses\Resources\Lessons\Pages\CreateLesson;
-use App\Filament\Resources\Courses\Resources\Lessons\Pages\EditLesson;
-use App\Filament\Resources\Courses\Resources\Lessons\Pages\ListLesson;
-use App\Filament\Resources\Courses\Resources\Lessons\Pages\ViewLesson;
-use App\Filament\Resources\Courses\Resources\Lessons\Schemas\LessonForm;
-use App\Filament\Resources\Courses\Resources\Lessons\Schemas\LessonInfolist;
-use App\Filament\Resources\Courses\Resources\Lessons\Tables\LessonsTable;
+use App\Filament\Resources\Lessons\Pages\CreateLesson;
+use App\Filament\Resources\Lessons\Pages\EditLesson;
+use App\Filament\Resources\Lessons\Pages\ListLesson;
+use App\Filament\Resources\Lessons\Pages\ViewLesson;
+use App\Filament\Resources\Lessons\Schemas\LessonForm;
+use App\Filament\Resources\Lessons\Schemas\LessonInfolist;
+use App\Filament\Resources\Lessons\Tables\LessonsTable;
 use App\Models\Lesson;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -50,9 +49,9 @@ class LessonResource extends Resource
     {
         return [
             'index' => ListLesson::route('/'),
-            'create' => CreateLesson::route('/create'),
+            // 'create' => CreateLesson::route('/create'),
             'view' => ViewLesson::route('/{record}'),
-            'edit' => EditLesson::route('/{record}/edit'),
+            // 'edit' => EditLesson::route('/{record}/edit'),
         ];
     }
 }

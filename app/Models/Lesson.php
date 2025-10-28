@@ -11,16 +11,14 @@ class Lesson extends Model
     protected $table = "lessons";
 
     protected $fillable = [
-        'course_id',
+        'section_id',
         'name',
-        'description',
-        'image',
-        'video',
+        'content',
     ];
 
-    public function course(): BelongsTo
+    public function section(): BelongsTo
     {
-        return $this->belongsTo(Course::class, "course_id", "id");
+        return $this->belongsTo(Section::class, "section_id", "id");
     }
 
     public function progress(): HasMany
@@ -41,5 +39,12 @@ class Lesson extends Model
     public function videos(): HasMany
     {
         return $this->hasMany(LessonVideo::class, "lesson_id", "id");
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'content' => 'collection',
+        ];
     }
 }

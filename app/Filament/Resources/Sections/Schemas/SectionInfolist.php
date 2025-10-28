@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Resources\Lessons\Schemas;
+namespace App\Filament\Resources\Sections\Schemas;
 
 use Filament\Schemas\Schema;
 
-class LessonForm
+class SectionInfolist
 {
     public static function configure(Schema $schema): Schema
     {

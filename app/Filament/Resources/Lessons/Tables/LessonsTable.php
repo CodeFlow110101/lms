@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Resources\Lessons\Tables;
+namespace App\Filament\Resources\Lessons\Tables;
 
-use App\Filament\Resources\Courses\Resources\Lessons\LessonResource;
+use App\Filament\Resources\Lessons\LessonResource;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -27,12 +28,14 @@ class LessonsTable
                     TextColumn::make('name')->size(TextSize::Large)->weight(FontWeight::Bold),
                 ])
             ])
-            ->recordUrl(fn($record): string => LessonResource::getUrl('view', ['course' => $record->course->id, 'record' => $record->id,]))
             ->filters([
                 //
             ])
             ->paginated(false)
-            ->recordActions([])
+            ->recordActions([
+                EditAction::make()->stickyModalFooter()->stickyModalHeader(),
+                DeleteAction::make(),
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     // DeleteBulkAction::make(),

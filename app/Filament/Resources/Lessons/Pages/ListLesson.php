@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Resources\Lessons\Pages;
+namespace App\Filament\Resources\Lessons\Pages;
 
-use App\Filament\Resources\Courses\Resources\Lessons\LessonResource;
+use App\Filament\Resources\Lessons\LessonResource;
 use Filament\Resources\Pages\Page;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;

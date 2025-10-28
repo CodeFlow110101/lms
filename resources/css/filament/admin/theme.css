@@ -20,7 +20,3 @@
 [id^="filament-comment-"] {
   @apply !m-0;
 }
-
-.fi-sidebar-nav-groups {
-  @apply gap-1;
-}

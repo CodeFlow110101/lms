@@ -6,6 +6,7 @@ use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Resources\Lessons\LessonResource;
 use App\Filament\Tables\Columns\ProgressBarColumn;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -24,15 +25,12 @@ class CoursesTable
     {
         return $table
             ->columns([
-                ImageColumn::make('image')->imageSize("100%")->imageWidth("100%")->grow(false)->extraAttributes(["class" => "flex justify-center items-center *:rounded-xl"]),
-                Stack::make([
-                    TextColumn::make('name')->description(fn($record) => Str::limit($record->description, 80))->extraAttributes(["class" => "gap-4 py-4"])->size(TextSize::Large)->weight(FontWeight::Bold)->searchable(),
-                    ProgressBarColumn::make('progress_percentage'),
-                ])->grow(true),
+                TextColumn::make('name')->searchable(),
             ])
-            ->recordUrl(fn($record): string => CourseResource::getUrl('view', ['record' => $record->id]))
-            ->filters([
-                //
+            ->filters([])
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make()
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

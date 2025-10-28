@@ -8,15 +8,16 @@ use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Livewire;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 use Livewire\Attributes\On;
 
 class ViewCourse extends ViewRecord
 {
     protected static string $resource = CourseResource::class;
 
-    public function getHeading(): string | Htmlable
+    public function getHeading(): Htmlable
     {
-        return "";
+        return new HtmlString("<div></div>");
     }
 
     #[On('reset-view-course-page')]

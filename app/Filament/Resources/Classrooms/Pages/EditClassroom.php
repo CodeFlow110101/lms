@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Courses\Resources\Lessons\Pages;
+namespace App\Filament\Resources\Classrooms\Pages;
 
-use App\Filament\Resources\Courses\Resources\Lessons\LessonResource;
+use App\Filament\Resources\Classrooms\ClassroomResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditLesson extends EditRecord
+class EditClassroom extends EditRecord
 {
-    protected static string $resource = LessonResource::class;
+    protected static string $resource = ClassroomResource::class;
 
     protected function getHeaderActions(): array
     {
