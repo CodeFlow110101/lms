@@ -2,10 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Customs\CustomLoginResponse;
 use App\Filament\Pages\Courses;
 use App\Filament\Resources\Categories\CategoryResource;
 use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
+use App\Filament\Resources\Posts\Pages\ListPosts;
 use App\Filament\Resources\Posts\PostResource;
 use App\Models\Category;
 use Filament\Http\Middleware\Authenticate;
@@ -29,6 +31,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Assets\Js;
+use Filament\Auth\Http\Responses\LoginResponse;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -42,16 +45,21 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('/')
+            ->pages([])
             ->login()
+            ->homeUrl(fn() => PostResource::getUrl('index'))
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->bootUsing(function (): void {
+                app()->bind(LoginResponse::class, CustomLoginResponse::class);
+            })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->viteTheme(['resources/css/filament/admin/theme.css', "resources/js/app.js"])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
+                // AccountWidget::class,
                 // FilamentInfoWidget::class,
             ])
             ->middleware([

@@ -53,6 +53,11 @@ class User extends Authenticatable implements Commenter
         return Filament::getUserAvatarUrl($this);
     }
 
+    public function likedPosts(): HasMany
+    {
+        return $this->hasMany(PostLike::class, "user_id", "id");
+    }
+
     protected function casts(): array
     {
         return [

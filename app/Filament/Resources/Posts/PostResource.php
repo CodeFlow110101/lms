@@ -19,6 +19,7 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
+
     public static function getNavigationIcon(): ?string
     {
         return null;
@@ -27,6 +28,8 @@ class PostResource extends Resource
     protected static ?string $modelLabel = 'Community';
 
     protected static ?string $pluralModelLabel = 'Community';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

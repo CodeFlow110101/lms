@@ -8,6 +8,14 @@ use Filament\Pages\Dashboard as BaseDashboard;
 
 class Dashboard extends BaseDashboard
 {
+
+    protected static bool $shouldRegisterNavigation = false;
+
+    public static function canAccess(): bool
+    {
+        return false;
+    }
+
     public static function getNavigationIcon(): ?string
     {
         return null;

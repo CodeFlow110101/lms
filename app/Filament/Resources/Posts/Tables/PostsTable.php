@@ -34,10 +34,13 @@ class PostsTable
                         TextColumn::make("user.name")->size(TextSize::Large)->weight(FontWeight::Bold),
                     ]),
                     TextColumn::make("title")->size(TextSize::Large)->description(fn($record) => $record->created_at->format('d M Y'))->extraAttributes(["class" => "*:last:italic"]),
-                    TextColumn::make("content")->html()->extraAttributes(["class" => "fi-prose max-h-10"]),
-                    ImageColumn::make('media.file')->extraImgAttributes(["class" => "w-full !h-auto"])->extraAttributes(["class" => "grid grid-cols-2"]),
-                    TextColumn::make("comment_count")->icon(Heroicon::ChatBubbleLeft)->badge()->size(TextSize::Medium)
-                ])->extraAttributes(["class" => "gap-10"])
+                    TextColumn::make("content")->formatStateUsing(fn($state) => strip_tags($state))->limit(400, end: ' ...read more'),
+                    ImageColumn::make('media.file')->extraImgAttributes(["class" => "w-full !h-auto"])->extraAttributes(["class" => "grid grid-cols-2 sm:w-1/2"]),
+                    Split::make([
+                        TextColumn::make('likes_count')->icon(fn($record) => $record->isLiked ? Heroicon::HandThumbUp : Heroicon::OutlinedHandThumbUp)->badge()->size(TextSize::Medium)->grow(false),
+                        TextColumn::make("comment_count")->icon(Heroicon::ChatBubbleLeft)->badge()->size(TextSize::Medium)
+                    ])
+                ])->extraAttributes(["class" => "gap-3"])
             ])
             ->contentGrid([1])
             ->filters([

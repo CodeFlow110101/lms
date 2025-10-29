@@ -25,6 +25,8 @@ class ClassroomResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Classroom';
 
+    protected static ?int $navigationSort = 2;
+
     public static function form(Schema $schema): Schema
     {
         return ClassroomForm::configure($schema);
