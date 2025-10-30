@@ -20,3 +20,7 @@
 [id^="filament-comment-"] {
   @apply !m-0;
 }
+
+.fi-body {
+  @apply select-none;
+}

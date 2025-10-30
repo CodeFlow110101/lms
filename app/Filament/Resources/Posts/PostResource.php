@@ -19,6 +19,8 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
+    protected static ?string $slug = '';
+
 
     public static function getNavigationIcon(): ?string
     {

@@ -11,6 +11,6 @@ class CustomLoginResponse extends LoginResponse
 {
     public function toResponse($request): RedirectResponse|Redirector
     {
-        return redirect()->intended(PostResource::getUrl("index"));
+        return redirect(PostResource::getUrl("index"));
     }
 }

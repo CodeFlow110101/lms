@@ -1,3 +1,14 @@
+document.addEventListener("livewire:init", () => {
+  // Disable right click
+  document.addEventListener("contextmenu", event => event.preventDefault());
+
+  // Disable copy shortcuts
+  document.addEventListener("keydown", function(e) {
+    if (e.ctrlKey && (e.key === "c" || e.key === "u")) e.preventDefault();
+    if (e.ctrlKey && e.shiftKey && e.key === "I") e.preventDefault(); // Ctrl+Shift+I
+  });
+});
+
 function videoPlayer(video) {
   return {
     isPlaying: false,

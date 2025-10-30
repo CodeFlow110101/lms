@@ -32,7 +32,7 @@ class ClassroomInfolist
                                 ->schema([
                                     Section::make(fn($record) => $record->name)
                                         ->collapsible()
-                                        ->collapsed()
+                                        ->collapsed(fn($record) => !$record->lessons->pluck("id")->contains(request()->route('lesson')))
                                         ->schema([
                                             RepeatableEntry::make('lessons')
                                                 ->hiddenLabel()
