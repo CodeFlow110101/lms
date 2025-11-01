@@ -5,12 +5,24 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
 
 class PostPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
+
+
+    public function before(User $user, string $ability): bool|null
+    {
+        if (Gate::check('is-administrator')) {
+            return true;
+        }
+
+        return null;
+    }
+
     public function viewAny(User $user): bool
     {
         return true;
@@ -37,7 +49,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return true;
+        return $post->user_id == $user->id;
     }
 
     /**
@@ -45,7 +57,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        return true;
+        return $post->user_id == $user->id;
     }
 
     /**

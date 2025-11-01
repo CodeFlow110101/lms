@@ -18,7 +18,11 @@ class DatabaseSeeder extends Seeder
 
         User::updateOrCreate(
             ['id' => 1],
-            ['name' => 'John Doe', 'email' => 'admin@test.com', 'password' => Hash::make("12345678")]
+            ['first_name' => 'John', 'last_name' => 'Doe', 'email' => 'admin@test.com', 'password' => Hash::make("12345678")]
         );
+
+        $this->call([
+            RoleSeeder::class,
+        ]);
     }
 }

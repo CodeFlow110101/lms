@@ -3,7 +3,10 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Customs\CustomLoginResponse;
+use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Pages\Auth\Register;
 use App\Filament\Pages\Courses;
+use App\Filament\Pages\HelpCenter;
 use App\Filament\Resources\Categories\CategoryResource;
 use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
@@ -31,7 +34,9 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Assets\Js;
-use Filament\Auth\Http\Responses\LoginResponse;
+use Filament\Actions\Action;
+use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Gate;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -47,13 +52,17 @@ class AdminPanelProvider extends PanelProvider
             ->path('/')
             ->pages([])
             ->login()
-            ->homeUrl(fn() => PostResource::getUrl('index'))
+            ->registration(Register::class)
+            ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->bootUsing(function (): void {
-                app()->bind(LoginResponse::class, CustomLoginResponse::class);
-            })
+            ->userMenuItems([
+                Action::make('Help Center')
+                    ->url(fn(): string => HelpCenter::getUrl())
+                    ->icon('heroicon-o-question-mark-circle')
+                    ->hidden(fn(): bool =>  !Gate::check("is-member"))
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->viteTheme(['resources/css/filament/admin/theme.css', "resources/js/app.js"])
@@ -81,7 +90,7 @@ class AdminPanelProvider extends PanelProvider
             ->spa();
     }
 
-    public function getResourcePageUrlPatters($resources)
+    public static function getResourcePageUrlPatters($resources)
     {
         return collect($resources)->map(fn($resource) => collect($resource::getPages())->map(fn($page) => $page->getPage()::getNavigationItemActiveRoutePattern()))->flatten();
     }

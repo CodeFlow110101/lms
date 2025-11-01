@@ -6,12 +6,16 @@ namespace App\Models;
 
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Panel;
+use Filament\Models\Contracts\FilamentUser;
 use Kirschbaum\Commentions\Contracts\Commenter;
+use Filament\Models\Contracts\HasName;
 
-class User extends Authenticatable implements Commenter
+class User extends Authenticatable implements Commenter, FilamentUser, HasName
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -22,9 +26,11 @@ class User extends Authenticatable implements Commenter
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -43,14 +49,34 @@ class User extends Authenticatable implements Commenter
      * @return array<string, string>
      */
 
-    public function enrollments(): HasMany
+    public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasMany(Enrollment::class, "user_id", "id");
+        return true;
+    }
+
+    public function getFilamentName(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getCommenterName(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 
     public function getAvatarAttribute()
     {
         return Filament::getUserAvatarUrl($this);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, "role_id", "id");
     }
 
     public function likedPosts(): HasMany

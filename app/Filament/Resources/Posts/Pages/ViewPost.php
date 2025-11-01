@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Posts\Pages;
 
 use App\Filament\Resources\Posts\PostResource;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\ViewRecord;
@@ -36,6 +37,7 @@ class ViewPost extends ViewRecord
     {
         return [
             EditAction::make(),
+            DeleteAction::make()
         ];
     }
 }

@@ -21,6 +21,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Gate;
 use UnitEnum;
 
 class CourseResource extends Resource
@@ -28,6 +29,11 @@ class CourseResource extends Resource
     protected static ?string $model = Course::class;
 
     protected static string | UnitEnum | null $navigationGroup = 'Administration';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Gate::check('is-administrator');
+    }
 
     public static function form(Schema $schema): Schema
     {

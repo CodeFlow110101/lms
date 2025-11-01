@@ -19,8 +19,7 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static ?string $slug = '';
-
+    protected static ?string $slug = '/';
 
     public static function getNavigationIcon(): ?string
     {
@@ -59,8 +58,8 @@ class PostResource extends Resource
     {
         return [
             'index' => ListPosts::route('/'),
-            // 'create' => CreatePost::route('/create'),
-            'view' => ViewPost::route('/{record}'),
+            'create' => CreatePost::route('/create'),
+            'view' => ViewPost::route('/view/{record}'),
             // 'edit' => EditPost::route('/{record}/edit'),
         ];
     }

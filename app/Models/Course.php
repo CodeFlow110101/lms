@@ -31,11 +31,6 @@ class Course extends Model
         );
     }
 
-    public function enrollments(): HasMany
-    {
-        return $this->hasMany(Enrollment::class, "course_id", "id");
-    }
-
     public function getProgressAttribute()
     {
         return $this->lessons()->whereHas("progress", fn($query) => $query->where("user_id", Auth::id()))->count();
