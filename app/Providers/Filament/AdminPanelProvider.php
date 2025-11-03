@@ -36,6 +36,9 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Assets\Js;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 
 class AdminPanelProvider extends PanelProvider
@@ -45,6 +48,11 @@ class AdminPanelProvider extends PanelProvider
         FilamentAsset::register([
             Js::make('custom-script', asset("js/alpine.js")),
         ]);
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::USER_MENU_BEFORE,
+            fn(): string => Blade::render('@livewire(\'membership-status-button\')'),
+        );
 
         return $panel
             ->default()
@@ -56,12 +64,6 @@ class AdminPanelProvider extends PanelProvider
             ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Amber,
-            ])
-            ->userMenuItems([
-                Action::make('Help Center')
-                    ->url(fn(): string => HelpCenter::getUrl())
-                    ->icon('heroicon-o-question-mark-circle')
-                    ->hidden(fn(): bool =>  !Gate::check("is-member"))
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

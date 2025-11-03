@@ -24,7 +24,7 @@ class HelpCenter extends Component implements HasSchemas
                 'user_id' => Auth::id(),
             ]))
             ->components([
-                CommentsEntry::make('comments')->mentionables(fn(Model $record) => User::all())->poll('10s')->hiddenLabel()->disableSidebar()->disablePagination(),
+                CommentsEntry::make('comments')->extraEntryWrapperAttributes(["class" => "comments-wrapper"])->mentionables(fn(Model $record) => User::all())->poll('10s')->hiddenLabel()->disableSidebar()->disablePagination(),
             ]);
     }
 

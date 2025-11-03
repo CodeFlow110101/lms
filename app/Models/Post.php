@@ -38,6 +38,11 @@ class Post extends Model implements Commentable
         return $this->hasMany(PostLike::class, "post_id", "id");
     }
 
+    public function getLikedUserAvatarsAttribute()
+    {
+        return $this->likes()->with("user")->get()->pluck("user.avatar");
+    }
+
     public function getIsLikedAttribute()
     {
         return $this->likes()->where("user_id", Auth::id())->exists();

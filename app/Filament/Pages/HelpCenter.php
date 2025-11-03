@@ -9,9 +9,16 @@ use Illuminate\Support\Facades\Gate;
 class HelpCenter extends Page
 {
 
-    protected static bool $shouldRegisterNavigation = false;
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Gate::check("is-member");
+    }
+
+    protected static ?string $navigationLabel = 'Chat with Admin';
 
     protected ?string $heading = "How can we help you?";
+
+    protected static ?int $navigationSort = 3;
 
     public function getHeaderWidgetsColumns(): int | array
     {
