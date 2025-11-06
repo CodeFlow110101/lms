@@ -61,7 +61,7 @@ class PaymentMethod extends Component implements HasActions, HasSchemas, HasTabl
 
     public function mount()
     {
-        // dd(Auth::user()->paymentMethods()->first()->card);
+        dd(Auth::user()->paymentMethods());
         // $this->intent = Auth::user()->createSetupIntent()->client_secret;
     }
 }
