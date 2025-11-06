@@ -14,11 +14,12 @@ use Filament\Panel;
 use Filament\Models\Contracts\FilamentUser;
 use Kirschbaum\Commentions\Contracts\Commenter;
 use Filament\Models\Contracts\HasName;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements Commenter, FilamentUser, HasName
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Billable;
 
     /**
      * The attributes that are mass assignable.

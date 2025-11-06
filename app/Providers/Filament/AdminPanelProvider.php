@@ -89,7 +89,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->topNavigation()
             ->breadcrumbs(false)
-            ->spa();
+            ->spa()
+            ->userMenuItems([
+                Action::make('Chat with Admin')->url(fn(): string => HelpCenter::getUrl())
+            ]);
     }
 
     public static function getResourcePageUrlPatters($resources)
