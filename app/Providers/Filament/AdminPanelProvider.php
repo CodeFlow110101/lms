@@ -7,6 +7,7 @@ use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Register;
 use App\Filament\Pages\Courses;
 use App\Filament\Pages\HelpCenter;
+use App\Filament\Pages\Membership;
 use App\Filament\Resources\Categories\CategoryResource;
 use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
@@ -41,6 +42,7 @@ use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\HtmlString;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -49,11 +51,6 @@ class AdminPanelProvider extends PanelProvider
         FilamentAsset::register([
             Js::make('custom-script', asset("js/alpine.js")),
         ]);
-
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::USER_MENU_BEFORE,
-            fn(): string => Blade::render('@livewire(\'membership-status-button\')'),
-        );
 
         return $panel
             ->default()
@@ -93,7 +90,8 @@ class AdminPanelProvider extends PanelProvider
             ->breadcrumbs(false)
             ->spa()
             ->userMenuItems([
-                Action::make('Chat with Admin')->url(fn(): string => HelpCenter::getUrl())
+                Action::make('Chat with Admin')->url(fn(): string => HelpCenter::getUrl()),
+                Action::make('Membership')->label(new HtmlString('Membership Status: <span class="!text-danger-500">Inactive</span>'))->url(fn(): string => Membership::getUrl()),
             ]);
     }
 
