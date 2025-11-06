@@ -12,6 +12,7 @@ use App\Filament\Resources\Courses\CourseResource;
 use App\Filament\Resources\Courses\Pages\ListCoursesBySubcategory;
 use App\Filament\Resources\Posts\Pages\ListPosts;
 use App\Filament\Resources\Posts\PostResource;
+use App\Http\Middleware\StripeUserRegistration;
 use App\Models\Category;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -86,6 +87,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                StripeUserRegistration::class,
             ])
             ->topNavigation()
             ->breadcrumbs(false)

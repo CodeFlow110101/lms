@@ -58,9 +58,4 @@ class PaymentMethod extends Component implements HasActions, HasSchemas, HasTabl
     {
         return view('livewire.payment-method');
     }
-
-    public function mount()
-    {
-        Auth::user()->createOrGetStripeCustomer();
-    }
 }
