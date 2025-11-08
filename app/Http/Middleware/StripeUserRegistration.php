@@ -16,7 +16,7 @@ class StripeUserRegistration
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Auth::user()->createOrGetStripeCustomer();
+        Auth::user()->stripe_id || Auth::user()->createOrGetStripeCustomer();
         return $next($request);
     }
 }

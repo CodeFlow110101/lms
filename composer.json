@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^4.0",
+        "jaocero/radio-deck": "^2.0",
         "kirschbaum-development/commentions": "^0.7.4",
         "laravel/cashier": "^16.0",
         "laravel/framework": "^12.0",
@@ -29,7 +30,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+        "app/Helpers/helpers.php"
+    ]
     },
     "autoload-dev": {
         "psr-4": {

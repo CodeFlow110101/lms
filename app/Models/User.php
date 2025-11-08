@@ -75,6 +75,17 @@ class User extends Authenticatable implements Commenter, FilamentUser, HasName
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    public function getCurrentPlanAttribute()
+    {
+        if ($this->subscribed('monthly')) {
+            return "monthly";
+        } elseif ($this->subscribed('yearly')) {
+            return "yearly";
+        } else {
+            return null;
+        }
+    }
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class, "role_id", "id");

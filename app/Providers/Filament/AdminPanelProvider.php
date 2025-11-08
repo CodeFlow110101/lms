@@ -91,7 +91,9 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->userMenuItems([
                 Action::make('Chat with Admin')->url(fn(): string => HelpCenter::getUrl()),
-                Action::make('Membership')->label(new HtmlString('Membership Status: <span class="!text-danger-500">Inactive</span>'))->url(fn(): string => Membership::getUrl()),
+                Action::make('Membership')->label(fn() => view('layout.membership-status-button', [
+                    'status' => Filament::auth()->user()->current_plan,
+                ]))->url(fn(): string => Membership::getUrl()),
             ]);
     }
 

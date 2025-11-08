@@ -3,6 +3,8 @@
 @source '../../../../resources/views/filament/**/*';
 @source '../../../../resources/views/livewire/**/*';
 @source '../../../../resources/views/**/*';
+@source '../../../../resources/views/layout/**/*';
+@source '../../../../vendor/jaocero/radio-deck/resources/views';
 
 .fi-sidebar-item-grouped-border-part-not-last,
 .fi-sidebar-item-grouped-border-part,
