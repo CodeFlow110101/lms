@@ -15,8 +15,9 @@ use Filament\Models\Contracts\FilamentUser;
 use Kirschbaum\Commentions\Contracts\Commenter;
 use Filament\Models\Contracts\HasName;
 use Laravel\Cashier\Billable;
+use Filament\Models\Contracts\HasAvatar;
 
-class User extends Authenticatable implements Commenter, FilamentUser, HasName
+class User extends Authenticatable implements Commenter, FilamentUser, HasName, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, Billable;
@@ -32,6 +33,8 @@ class User extends Authenticatable implements Commenter, FilamentUser, HasName
         'email',
         'password',
         'role_id',
+        'phone_no',
+        'avatar_url'
     ];
 
     /**
@@ -65,9 +68,23 @@ class User extends Authenticatable implements Commenter, FilamentUser, HasName
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function getFilamentAvatarUrl(): ?string
+    {
+        if (empty($this->avatar_url)) {
+            return null;
+        }
+
+        return route('image.show', ['filename' => basename($this->avatar_url)]);
+    }
+
+
     public function getAvatarAttribute()
     {
-        return Filament::getUserAvatarUrl($this);
+        if (! $this->avatar_url) {
+            return Filament::getUserAvatarUrl($this);
+        }
+
+        return route('image.show', ['filename' => basename($this->avatar_url)]);
     }
 
     public function getFullNameAttribute()

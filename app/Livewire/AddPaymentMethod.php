@@ -19,7 +19,7 @@ class AddPaymentMethod extends Component
             ->success()
             ->send();
 
-        return  $this->redirect(PaymentMethod::getUrl(), navigate: true);
+        $this->dispatch('close-modal', id: 'create-payment-method');
     }
 
     public function render()

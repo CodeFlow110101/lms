@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Stripe\Price;
 use Stripe\Stripe;
@@ -16,6 +17,11 @@ class MembershipWidget extends StatsOverviewWidget
     public $amount;
     public $currency;
     public $plan;
+
+    public static function canView(): bool
+    {
+        return Gate::check("is-member");
+    }
 
     protected function getStats(): array
     {

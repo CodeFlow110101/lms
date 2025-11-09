@@ -10,7 +10,7 @@
                 User details
             </x-slot>
             <div class="flex flex-col gap-4">
-                <div>
+                <div class="flex flex-col gap-2">
                     <label>Card Holder name (Optional) </label>
                     <x-filament::input.wrapper>
                         <x-filament::input x-model="cardHolderName" type="text" />
@@ -28,55 +28,3 @@
         </x-filament::section>
     </div>
 </div>
-
-@assets
-<script src="https://js.stripe.com/v3/"></script>
-@endassets
-
-@push('scripts')
-<script>
-    function stripePaymentSetup({
-        publicKey,
-        clientSecret
-    }) {
-        return {
-            stripe: null,
-            cardElement: null,
-            error: null,
-            cardHolderName: null,
-            loadingIndicator: null,
-            init() {
-                this.stripe = Stripe(publicKey);
-                const elements = this.stripe.elements();
-
-                this.cardElement = elements.create('card');
-                this.cardElement.mount('#card-element');
-            },
-
-            async handleSubmit() {
-                this.loadingIndicator = true;
-                const {
-                    setupIntent,
-                    error
-                } = await this.stripe.confirmCardSetup(
-                    clientSecret, {
-                        payment_method: {
-                            card: this.cardElement,
-                            billing_details: {
-                                name: this.cardHolderName
-                            }
-                        }
-                    }
-                );
-
-                this.loadingIndicator = false;
-                if (error) {
-                    this.error = error.message;
-                } else {
-                    this.$wire.back();
-                }
-            }
-        }
-    }
-</script>
-@endpush

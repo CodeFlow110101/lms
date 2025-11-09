@@ -8,6 +8,86 @@ document.addEventListener("livewire:init", () => {
   // });
 });
 
+function stripePaymentSetup({ publicKey, clientSecret }) {
+  return {
+    stripe: null,
+    cardElement: null,
+    error: null,
+    cardHolderName: null,
+    loadingIndicator: null,
+    init() {
+      this.stripe = Stripe(publicKey);
+      const elements = this.stripe.elements();
+
+      this.cardElement = elements.create("card");
+      this.cardElement.mount("#card-element");
+    },
+
+    async handleSubmit() {
+      this.loadingIndicator = true;
+      const {
+        setupIntent,
+        error
+      } = await this.stripe.confirmCardSetup(clientSecret, {
+        payment_method: {
+          card: this.cardElement,
+          billing_details: {
+            name: this.cardHolderName
+          }
+        }
+      });
+
+      this.loadingIndicator = false;
+      if (error) {
+        this.error = error.message;
+      } else {
+        this.$wire.back();
+      }
+    }
+  };
+}
+
+function stripeRegistrationPaymentSetup({ publicKey, clientSecret }) {
+  return {
+    stripe: null,
+    cardElement: null,
+    error: null,
+    cardHolderName: null,
+    loadingIndicator: null,
+    init() {
+      this.stripe = Stripe(publicKey);
+      const elements = this.stripe.elements();
+
+      this.cardElement = elements.create("card");
+      this.cardElement.mount("#card-element");
+    },
+
+    async handleSubmit() {
+      this.loadingIndicator = true;
+      this.$wire.validate();
+
+      const {
+        setupIntent,
+        error
+      } = await this.stripe.confirmCardSetup(clientSecret, {
+        payment_method: {
+          card: this.cardElement,
+          billing_details: {
+            name: this.cardHolderName
+          }
+        }
+      });
+
+      this.loadingIndicator = false;
+      if (error) {
+        this.error = error.message;
+      } else {
+        this.$wire.create(setupIntent.payment_method);
+      }
+    }
+  };
+}
+
 function videoPlayer(video) {
   return {
     isPlaying: false,

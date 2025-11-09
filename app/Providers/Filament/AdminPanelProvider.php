@@ -50,7 +50,13 @@ class AdminPanelProvider extends PanelProvider
     {
         FilamentAsset::register([
             Js::make('custom-script', asset("js/alpine.js")),
+            Js::make('stripe-script', "https://js.stripe.com/v3/"),
         ]);
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::USER_MENU_BEFORE,
+            fn(): string => Blade::render('@livewire(\'navbar-buttons\')'),
+        );
 
         return $panel
             ->default()
@@ -89,12 +95,8 @@ class AdminPanelProvider extends PanelProvider
             ->topNavigation()
             ->breadcrumbs(false)
             ->spa()
-            ->userMenuItems([
-                Action::make('Chat with Admin')->url(fn(): string => HelpCenter::getUrl()),
-                Action::make('Membership')->label(fn() => view('layout.membership-status-button', [
-                    'status' => Filament::auth()->user()->current_plan,
-                ]))->url(fn(): string => Membership::getUrl()),
-            ]);
+            ->topbar(fn() => !request()->routeIs('filament.admin.pages.subscribe'))
+        ;
     }
 
     public static function getResourcePageUrlPatters($resources)
