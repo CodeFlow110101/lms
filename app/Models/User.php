@@ -34,7 +34,8 @@ class User extends Authenticatable implements Commenter, FilamentUser, HasName, 
         'password',
         'role_id',
         'phone_no',
-        'avatar_url'
+        'avatar_url',
+        'phone_no_country_code'
     ];
 
     /**

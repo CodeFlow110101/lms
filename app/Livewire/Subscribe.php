@@ -68,6 +68,7 @@ class Subscribe extends Component implements HasSchemas, HasActions
     {
         return Action::make('logout')
             ->outlined()
+            ->label("Log Out")
             ->requiresConfirmation()
             ->action(function () {
                 Auth::logout();
@@ -89,6 +90,7 @@ class Subscribe extends Component implements HasSchemas, HasActions
                     ->iconPosition(IconPosition::Before) // Before | After
                     ->alignment(Alignment::Center) // Start | Center | End
                     ->colors('primary')
+                    ->default("monthly")
                     ->extraOptionsAttributes([ // Extra attributes for option elements
                         'class' => 'text-xl'
                     ])

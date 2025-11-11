@@ -6,11 +6,13 @@ use Filament\Auth\Pages\Register as BaseRegister;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Flex;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\IconPosition;
 use Illuminate\Support\Str;
 use JaOcero\RadioDeck\Forms\Components\RadioDeck;
+use Tapp\FilamentCountryCodeField\Forms\Components\CountryCodeSelect;
 
 class Register extends BaseRegister
 {
@@ -33,10 +35,14 @@ class Register extends BaseRegister
                         ->maxLength(255)
                         ->autofocus(),
                 ]),
+                CountryCodeSelect::make('phone_no_country_code')
+                    ->label("Country Code")
+                    ->live()
+                    ->required(),
                 TextInput::make('phone_no')
                     ->required()
                     ->mask('999999999')
-                    ->prefix('+33')
+                    ->prefix(fn(Get $get) => $get("phone_no_country_code"))
                     ->tel()
                     ->autofocus()
                     ->rule('digits:9'),
