@@ -12,7 +12,7 @@ class Course extends Model
 {
     protected $table = "courses";
 
-    protected $fillable = ["name", "description", "image"];
+    protected $fillable = ["name", "description", "image", "available_in_monthly_plan"];
 
     public function sections(): HasMany
     {
