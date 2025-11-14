@@ -36,15 +36,67 @@ class Course extends Model
         return $this->lessons()->whereHas("progress", fn($query) => $query->where("user_id", Auth::id()))->count();
     }
 
+    public function getLessonsReadAttribute()
+    {
+        return $this->lessons()
+            ->whereHas(
+                'progress',
+                fn($query) =>
+                $query->where('user_id', auth()->id())
+            )
+            ->count();
+    }
+
+    public function getIsFullyCompletedAttribute()
+    {
+        $userId = auth()->id();
+
+        $total = $this->lessons()->count();
+        if ($total === 0) {
+            return false;
+        }
+
+        $completed = LessonProgress::where('user_id', $userId)
+            ->whereIn('lesson_id', $this->lessons->pluck('id'))
+            ->where('is_completed', true)
+            ->count();
+
+        return $completed === $total;
+    }
+
+    public function getHasReadAllLessonsAttribute(): bool
+    {
+        $userId = auth()->id();
+
+        $totalLessons = $this->lessons()->count();
+
+        if ($totalLessons === 0) {
+            return false;
+        }
+
+        $readLessons = LessonProgress::where('user_id', $userId)
+            ->whereIn('lesson_id', $this->lessons->pluck('id'))
+            ->count();
+
+        return $readLessons === $totalLessons;
+    }
+
     public function getProgressPercentageAttribute()
     {
-        $completed = (int) $this->progress;
-        $total = (int) $this->lessons->count();
+        $totalLessons = $this->lessons->count();
+        $lessonsRead  = $this->lessons_read;
 
-        if ($total === 0) {
+        if ($totalLessons === 0) {
             return 0;
         }
 
-        return round(($completed / $total) * 100, 2);
+        // If user read all lessons → 50%
+        if ($lessonsRead === $totalLessons) {
+            // If also marked completed → 100%
+            return $this->is_fully_completed ? 100 : 50;
+        }
+
+        // Otherwise proportional (reading progress)
+        return round(($lessonsRead / $totalLessons) * 50, 2);
     }
 }

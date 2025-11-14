@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Classrooms\Schemas;
 
+use App\Filament\Infolists\Components\CompletionMarkerEntry;
 use App\Filament\Infolists\Components\NavigationButtonEntry;
 use App\Filament\Infolists\Components\ProgressBarEntry;
 use App\Filament\Infolists\Components\VideoPlayerEntry;
@@ -14,6 +15,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\TextSize;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\HtmlString;
 
 class ClassroomInfolist
@@ -21,19 +23,21 @@ class ClassroomInfolist
     public static function configure(Schema $schema): Schema
     {
         return $schema
-            ->record(Lesson::find(request()->route('lesson')))
+            ->record(fn($livewire) => $livewire->lesson)
             ->components([
                 Flex::make([
                     Grid::make()
                         ->schema([
-                            // ProgressBarEntry::make("course.ProgressPercentage")->hiddenLabel(),
+                            ProgressBarEntry::make("section.course.progress_percentage")->hiddenLabel()->hidden(Gate::check("is-administrator")),
                             RepeatableEntry::make('section.course.sections')
                                 ->hiddenLabel()
                                 ->schema([
                                     Section::make(fn($record) => $record->name)
                                         ->collapsible()
-                                        ->collapsed(fn($record) => !$record->lessons->pluck("id")->contains(request()->route('lesson')))
-                                        ->schema([
+                                        ->collapsed(
+                                            fn($record, $livewire) =>
+                                            !$record->lessons->pluck('id')->contains($livewire->lesson?->id)
+                                        )->schema([
                                             RepeatableEntry::make('lessons')
                                                 ->hiddenLabel()
                                                 ->schema([
@@ -49,7 +53,7 @@ class ClassroomInfolist
                             TextEntry::make("name")->hiddenLabel()->size(TextSize::Large),
                             Section::make()
                                 ->schema(
-                                    fn($record) => $record->content
+                                    fn($livewire) => $livewire->lesson->content
                                         ->map(function ($rows) {
                                             if ($rows['type'] == "text") {
                                                 return TextEntry::make('description')->hiddenLabel()->default($rows['data']["text"])->html()->extraAttributes(["class" => "fi-prose py-3"]);
@@ -60,7 +64,8 @@ class ClassroomInfolist
                                             }
                                         })
                                         ->all()
-                                )
+                                ),
+                            CompletionMarkerEntry::make("mark-complete")->hiddenLabel(),
                         ]),
                 ])->from('sm')->extraAttributes(["class" => "sm:*:first:w-1/4"]),
             ])->columns(1);

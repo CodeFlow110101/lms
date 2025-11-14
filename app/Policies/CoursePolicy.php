@@ -88,4 +88,49 @@ class CoursePolicy
     {
         return false;
     }
+
+    public function access(User $user, Course $course): bool
+    {
+        // Admins always allowed
+        if (Gate::check("is-administrator")) {
+            return true;
+        }
+
+        // Members only
+        if (Gate::check("is-member")) {
+
+            // Yearly members always allowed
+            if ($user->current_plan === 'yearly') {
+                return true;
+            }
+
+            // Monthly members only allowed if course is in monthly plan
+            if ($user->current_plan === 'monthly') {
+                return $course->available_in_monthly_plan;
+            }
+        }
+
+        // Default deny
+        return false;
+    }
+
+    public function showModal(User $user, Course $course): bool
+    {
+        // Admins never see modal
+        if (Gate::check("is-administrator")) {
+            return false;
+        }
+
+        // Monthly users see modal **only if** course is in monthly plan
+        if (Gate::check("is-member")) {
+            return $course->available_in_monthly_plan === false;
+        }
+
+        // All yearly users bypass modal
+        if ($user->current_plan === 'yearly') {
+            return false;
+        }
+
+        return false;
+    }
 }

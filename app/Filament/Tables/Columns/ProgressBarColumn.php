@@ -3,6 +3,7 @@
 namespace App\Filament\Tables\Columns;
 
 use Filament\Tables\Columns\Column;
+use Illuminate\Support\Facades\Gate;
 
 class ProgressBarColumn extends Column
 {

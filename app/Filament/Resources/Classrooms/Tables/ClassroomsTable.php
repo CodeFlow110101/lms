@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Classrooms\Tables;
 
 use App\Filament\Pages\HelpCenter;
 use App\Filament\Resources\Classrooms\ClassroomResource;
+use App\Filament\Tables\Columns\ProgressBarColumn;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -18,6 +19,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Filament\Tables\Columns\Layout\View;
 
 class ClassroomsTable
 {
@@ -25,51 +27,21 @@ class ClassroomsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('image')->imageSize("100%")->imageWidth("100%")->grow(false)->extraAttributes(["class" => "flex justify-center items-center *:rounded-xl"]),
+                View::make('filament.tables.columns.classroom-custom-layout')
+                    ->components([
+                        ImageColumn::make('image')->imageSize("14rem")->imageWidth("100%")->grow(false)->extraAttributes(["class" => "flex justify-center items-center *:rounded-xl"]),
+                    ]),
                 Stack::make([
-                    TextColumn::make('name')->description(fn($record) => Str::limit($record->description, 80))->extraAttributes(["class" => "gap-4 py-4"])->size(TextSize::Large)->weight(FontWeight::Bold)->searchable(),
-
-                    // ProgressBarColumn::make('progress_percentage'),
+                    TextColumn::make('name')->extraAttributes(["class" => "gap-4 py-4"])->size(TextSize::Large)->weight(FontWeight::Bold)->searchable(),
+                    ProgressBarColumn::make('progress_percentage'),
                 ])->grow(true),
             ])
             ->recordUrl(function ($record) {
-                // Admins always go directly
-                if (Gate::check('is-administrator')) {
-                    return $record->lessons->first()
-                        ? ClassroomResource::getUrl('view', [
-                            'record' => $record->id,
-                            'lesson' => $record->lessons->first()->id,
-                        ])
-                        : null;
+                $firstLesson = $record->lessons->first();
+                if (!auth()->user()->can('access', $record)) {
+                    return null;
                 }
-                // Members logic
-                if (Gate::check('is-member')) {
-                    // If course is available in monthly plan
-                    if ($record->available_in_monthly_plan) {
-                        // Monthly users see modal (handled via recordAction)
-                        if (Auth::user()->current_plan === 'monthly') {
-                            return null;
-                        }
-
-                        // Yearly users go directly
-                        if (Auth::user()->current_plan === 'yearly') {
-                            return $record->lessons->first()
-                                ? ClassroomResource::getUrl('view', [
-                                    'record' => $record->id,
-                                    'lesson' => $record->lessons->first()->id,
-                                ])
-                                : null;
-                        }
-                    }
-                    // If not part of monthly plan, yearly users can still go
-                    return $record->lessons->first()
-                        ? ClassroomResource::getUrl('view', [
-                            'record' => $record->id,
-                            'lesson' => $record->lessons->first()->id,
-                        ])
-                        : null;
-                }
-                return null;
+                return $firstLesson ? ClassroomResource::getUrl('view', ['record' => $record->id, 'lesson' => $record->lessons->first()->id,]) : null;
             })
             ->recordAction('test')
             ->recordActions([
@@ -81,18 +53,7 @@ class ClassroomsTable
                     ->modalSubmitActionLabel('Chat with Admin')
                     ->color('warning')
                     ->action(fn($livewire) => $livewire->redirect(HelpCenter::getUrl(), navigate: true))
-                    ->visible(function ($record) {
-                        // Admins should never see modal
-                        if (Gate::check('is-administrator')) {
-                            return false;
-                        }
-                        // Show modal for monthly members only
-                        if ($record->available_in_monthly_plan && Gate::check('is-member')) {
-                            return Auth::user()->current_plan === 'monthly';
-                        }
-
-                        return false;
-                    }),
+                    ->visible(fn($record) => auth()->user()->can('showModal', $record))
             ])
 
             ->filters([

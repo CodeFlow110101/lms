@@ -12,7 +12,6 @@ class NavigationButtonEntry extends Entry
 
     public function getViewData(): array
     {
-
         $lesson = Lesson::find($this->getState());
         return [
             'id' => $this->getState(),
